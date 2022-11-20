@@ -1,0 +1,27 @@
+GET http://localhost:3000/achievement/global HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRvbmdxdWFuZ3RoYW5oOTRAZ21haWwuY29tIiwidXNlcklkIjoiNjM3OWY4NTg4ZTYzZGI4ZjNkODk0OTgzIiwiaWF0IjoxNjY4OTY1NDkxLCJleHAiOjE2NzE1NTc0OTF9.CsPieFQlTbATG0ECWdbUelF0mlRQM25MUVhNR_pG62M
+
+###
+
+GET http://localhost:3000/achievement/user HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRvbmdxdWFuZ3RoYW5oOTRAZ21haWwuY29tIiwidXNlcklkIjoiNjM3OWY4NTg4ZTYzZGI4ZjNkODk0OTgzIiwiaWF0IjoxNjY4OTY1NDkxLCJleHAiOjE2NzE1NTc0OTF9.CsPieFQlTbATG0ECWdbUelF0mlRQM25MUVhNR_pG62M
+
+###
+
+POST http://localhost:3000/achievement/save HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRvbmdxdWFuZ3RoYW5oOTRAZ21haWwuY29tIiwidXNlcklkIjoiNjM3OWY4NTg4ZTYzZGI4ZjNkODk0OTgzIiwiaWF0IjoxNjY4OTY1NDkxLCJleHAiOjE2NzE1NTc0OTF9.CsPieFQlTbATG0ECWdbUelF0mlRQM25MUVhNR_pG62M
+
+{
+    "point": 0,
+    "difficult": "random",
+    "count": 1,
+    "countTrue": 0,
+    "countFail": 1,
+    "elapsedTime": "0:1",
+    "dateScore": "2022-11-20T17:02:55.887Z",
+    "scoredBy": "6379f8588e63db8f3d894983",
+    "questionIds": [
+        "622a1c367cc59eab6f950176"
+    ]
+}

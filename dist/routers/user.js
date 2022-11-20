@@ -18,74 +18,36 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../mongoose/user");
 const const_1 = require("../const");
-const browser_1 = __importDefault(require("@emailjs/browser"));
 exports.userRouters = express_1.default.Router();
-exports.userRouters.get("/data", (_req, res) => {
-    res.status(200).json({ message: "Fetch successfully", data: [] });
-});
+const salt = process.env.SALT_ROUNDS || 10;
 exports.userRouters.post('/change', (req, res) => {
-    // UserSchema.findOne({ email: req.body.email }).then(user => {
-    //   if (user && req.body.email) {
-    //     const password = '123456';
-    //     const params = {
-    //       to: req.body.email,
-    //       password
-    //     };
-    //     emailjs.send('service_v17mx66', 'template_is53cop', params, 'user_RHbhBWi0166Xhqv2Nx7mm')
-    //       .then((result: EmailJSResponseStatus) => {
-    //         console.log(result.text);
-    //         bcrypt.hash(password, 10)
-    //           .then(hash => {
-    //             user.password = hash;
-    //             user.save().then(result => {
-    //               res.status(200).json({ message: "Đổi mật khẩu thành công", data: [] });
-    //             });
-    //           })
-    //           .catch(err => res.status(500).json({ message: "Lỗi server", data: 'Save user' }));
-    //       })
-    //       .catch(err => res.status(500).json({ message: "Lỗi server", data: 'Send email' }));
-    //   } else {
-    //     res.status(401).json({ message: "Email không đúng", data: 'Not found user' });
-    //   }
-    // })
-    //   .catch(err => res.status(500).json({ message: "Lỗi server", data: 'Find user error' }));
 });
 exports.userRouters.post('/forgot-password', (req, res) => {
     user_1.UserSchema.findOne({ email: req.body.email }).then(user => {
         if (user && req.body.email) {
             const password = '123456';
-            const params = {
-                to: req.body.email,
-                password
-            };
-            browser_1.default.send('service_v17mx66', 'template_is53cop', params, 'user_RHbhBWi0166Xhqv2Nx7mm')
-                .then((result) => {
-                bcrypt_1.default.hash(password, 10)
-                    .then(hash => {
-                    user.password = hash;
-                    user.save().then(result => {
-                        res.status(200).json({ message: "Đổi mật khẩu thành công", data: [] });
-                    });
-                })
-                    .catch(err => res.status(500).json({ message: "Lỗi server", data: 'Save user' }));
+            bcrypt_1.default.hash(password, salt)
+                .then(hash => {
+                user.password = hash;
+                user.save().then(result => res.status(200).json({ message: const_1.SUCCESS_RESET_PASSWORD, data: user }));
             })
-                .catch(err => res.status(500).json({ message: "Lỗi server", data: 'Send email' }));
+                .catch(err => res.status(500).json({ message: const_1.ERROR_SERVER, data: null }));
         }
         else {
-            res.status(401).json({ message: "Email không đúng", data: 'Not found user' });
+            res.status(401).json({ message: const_1.ERROR_EMAIL_NOT_FOUND, data: null });
         }
     })
-        .catch(err => res.status(500).json({ message: "Lỗi server", data: 'Find user error' }));
+        .catch(err => res.status(500).json({ message: const_1.ERROR_SERVER, data: null }));
 });
 exports.userRouters.post('/signin', (req, res) => {
     user_1.UserSchema.findOne({ email: req.body.email }).then(user => {
         let token = '';
         if (user && bcrypt_1.default.compareSync(req.body.password, (user === null || user === void 0 ? void 0 : user.password) || '')) {
-            token = jsonwebtoken_1.default.sign({ email: user.email, userId: user._id }, const_1.APP_NAME_TOKEN, { expiresIn: "30d" });
+            token = jsonwebtoken_1.default.sign({ email: user.email, userId: user._id }, process.env.TOKEN_SECRET, { expiresIn: "30d" });
         }
-        res.status(token ? 200 : 401).json({ message: token ? "Đăng nhập thành công" : "Email hoặc mật khẩu không đúng", data: token ? { token, user } : null });
+        res.status(token ? 200 : 401).json({ message: token ? const_1.SUCCESS_SIGNIN : const_1.ERROR_SIGNIN_FAIL, data: token ? { token, user } : null });
     })
-        .catch(err => res.status(500).json({ message: "Lỗi server", data: err }));
+        .catch(err => res.status(500).json({ message: const_1.ERROR_SERVER, data: err }));
 });
 exports.userRouters.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // if (req.body.password !== req.body.rePassword) {
@@ -93,9 +55,9 @@ exports.userRouters.post('/signup', (req, res) => __awaiter(void 0, void 0, void
     // }
     const user = yield user_1.UserSchema.findOne({ email: req.body.email });
     if (user) {
-        return res.status(400).json({ message: "Email đã tồn tại", data: null });
+        return res.status(400).json({ message: const_1.ERROR_EMAIL_DUPLICATE, data: null });
     }
-    bcrypt_1.default.hash(req.body.password, 10)
+    bcrypt_1.default.hash(req.body.password, salt)
         .then(hash => {
         const user = new user_1.UserSchema({
             name: req.body.name,
@@ -105,9 +67,9 @@ exports.userRouters.post('/signup', (req, res) => __awaiter(void 0, void 0, void
             birth: req.body.birth
         });
         user.save().then(result => {
-            const token = jsonwebtoken_1.default.sign({ email: user.email, userId: result._id }, const_1.APP_NAME_TOKEN, { expiresIn: "30d" });
-            res.status(201).json({ message: "Đăng ký thành công", data: { token, user } });
+            const token = jsonwebtoken_1.default.sign({ email: user.email, userId: result._id }, process.env.TOKEN_SECRET, { expiresIn: "30d" });
+            res.status(201).json({ message: const_1.SUCCESS_SIGNUP, data: { token, user } });
         });
     })
-        .catch(err => res.status(500).json({ message: "Lỗi server", data: err }));
+        .catch(err => res.status(500).json({ message: const_1.ERROR_SERVER, data: err }));
 }));

@@ -18,16 +18,14 @@ const http_1 = __importDefault(require("http"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const user_1 = require("./routers/user");
 const axios_1 = __importDefault(require("axios"));
+const cors_1 = __importDefault(require("cors"));
+const achievement_1 = require("./routers/achievement");
+const token_1 = require("./middleware/token");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Headers", "Origin, Accept, Content-Type, X-Requested-With, Authorization");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS, PATCH");
-    next();
-});
+app.use((0, cors_1.default)());
 mongoose_1.default.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.1zzl3oc.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`)
     .then((db) => __awaiter(void 0, void 0, void 0, function* () { console.log('[database]: Connected to database!'); })).catch(e => console.log(e));
 const normalizePort = (val) => {
@@ -49,7 +47,8 @@ app.get("/", (req, res, next) => {
     res.send('Welcome!!!');
 });
 app.use("/user", user_1.userRouters);
+app.use("/achievement", token_1.userAuthenticated, achievement_1.achievementRouters);
 server.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     console.log(`[server]: Server is running, current time: `, new Date());
-    setInterval(() => __awaiter(void 0, void 0, void 0, function* () { return console.log((yield axios_1.default.get('https://thnvn-phim.onrender.com/data')).data); }), 1000 * 60 * (5 - 0.1)); // 4.9p
+    setInterval(() => __awaiter(void 0, void 0, void 0, function* () { return console.log((yield axios_1.default.get('https://thnvn-knowledge-challenge.onrender.com')).data); }), 1000 * 60 * (5 - 0.1)); // 4.9p
 }));

@@ -4,18 +4,17 @@ import http from 'http';
 import mongoose from 'mongoose';
 import { userRouters } from './routers/user';
 import axios from 'axios';
+import cors from 'cors';
+import { achievementRouters } from './routers/achievement';
+import { userAuthenticated } from './middleware/token';
+
 dotenv.config();
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Headers", "Origin, Accept, Content-Type, X-Requested-With, Authorization");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS, PATCH");
-  next();
-});
+app.use(cors())
 
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.1zzl3oc.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`)
   .then(async (db) => { console.log('[database]: Connected to database!'); }).catch(e => console.log(e));
@@ -39,8 +38,9 @@ app.get("/", (req, res, next) => {
 });
 
 app.use("/user", userRouters);
+app.use("/achievement", userAuthenticated, achievementRouters);
 
 server.listen(port, async () => {
   console.log(`[server]: Server is running, current time: `, new Date());
-  setInterval(async () => console.log((await axios.get('https://thnvn-phim.onrender.com/data')).data), 1000 * 60 * (5 - 0.1)); // 4.9p
+  setInterval(async () => console.log((await axios.get('https://thnvn-knowledge-challenge.onrender.com')).data), 1000 * 60 * (5 - 0.1)); // 4.9p
 });

@@ -8,6 +8,7 @@ const achievementSchema = new mongoose.Schema({
   countTrue: { type: Number, require: true },
   countFail: { type: Number, require: true },
   elapsedTime: { type: String, require: true },
+  elapsedTimeNumber: { type: Number, require: true },
   dateScore: { type: Date, require: true },
   scoredBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', require: true },
   questionIds: { type: Array, require: true, "default": [] }
