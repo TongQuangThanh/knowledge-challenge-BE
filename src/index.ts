@@ -38,7 +38,7 @@ app.get("/", (req, res, next) => {
 });
 
 app.use("/user", userRouters);
-app.use("/achievement", userAuthenticated, achievementRouters);
+app.use("/achievement", achievementRouters);
 
 server.listen(port, async () => {
   console.log(`[server]: Server is running, current time: `, new Date());
