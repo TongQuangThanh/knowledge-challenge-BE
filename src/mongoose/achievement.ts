@@ -11,6 +11,7 @@ const achievementSchema = new mongoose.Schema({
   elapsedTimeNumber: { type: Number, require: true },
   dateScore: { type: Date, require: true },
   scoredBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', require: true },
+  userName: String,
   questionIds: { type: Array, require: true, "default": [] }
 });
 
