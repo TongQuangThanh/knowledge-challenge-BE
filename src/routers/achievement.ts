@@ -24,9 +24,7 @@ achievementRouters.get('/achievement', (req, res) => {
 achievementRouters.post('/save', (req, res) => {
   const achievement = new AchievementSchema({ ...req.body });
   achievement.save()
-    .then(result => {
-      res.status(200).json({ message: SUCCESS_ADD_ACHIEVEMENT, data: result })
-    })
+    .then(result => res.status(200).json({ message: SUCCESS_ADD_ACHIEVEMENT, data: result }))
     .catch(err => res.status(500).json({ message: ERROR_SERVER, data: err }));
 });
 
@@ -34,7 +32,7 @@ const facet = (limit: number, page: number) => {
   return {
     $facet: {
       totalRecords: [{ $count: "total" }],
-      movies: [
+      achievements: [
         { $skip: limit * page },
         { $limit: limit }
       ]
