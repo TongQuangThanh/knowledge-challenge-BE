@@ -16,6 +16,7 @@ const achievementSchema = new mongoose_1.default.Schema({
     elapsedTimeNumber: { type: Number, require: true },
     dateScore: { type: Date, require: true },
     scoredBy: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'User', require: true },
+    userName: String,
     questionIds: { type: Array, require: true, "default": [] }
 });
 achievementSchema.plugin(mongoose_unique_validator_1.default);

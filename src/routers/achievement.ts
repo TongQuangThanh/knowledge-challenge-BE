@@ -3,7 +3,7 @@ import { AchievementSchema } from '../mongoose/achievement'
 import { ERROR_SERVER, SUCCESS_ADD_ACHIEVEMENT, SUCCESS_FETCH } from '../const';
 export const achievementRouters = express.Router();
 
-achievementRouters.get('/achievement', (req, res) => {
+achievementRouters.get('/list', (req, res) => {
   const page = +(req.query.page || 1) - 1;
   const limit = +(req.query.limit || 10);
   let match = {};
@@ -13,7 +13,7 @@ achievementRouters.get('/achievement', (req, res) => {
   AchievementSchema.aggregate(
     [
       { $match: match },
-      { $sort: { createdAt: -1 } },
+      { $sort: { point: -1 } },
       facet(limit, page)
     ]
   )
