@@ -23,10 +23,30 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userAuthenticated = void 0;
+exports.userAuthenticated = exports.userAuthorization = void 0;
 const jsonwebtoken_1 = __importStar(require("jsonwebtoken"));
 const const_1 = require("../const");
 const user_1 = require("../mongoose/user");
+const userAuthorization = (req, res, next) => {
+    const authorizationHeader = req.headers.authorization || 'Bearer';
+    const authorizations = authorizationHeader.split(' ');
+    if (authorizations.length === 2) {
+        const token = authorizations[1];
+        const decoded = jsonwebtoken_1.default.verify(token, `${process.env.TOKEN_SECRET}`);
+        user_1.UserSchema.findById(decoded.userId)
+            .then(result => {
+            if ((result === null || result === void 0 ? void 0 : result.email) === decoded.email) {
+                req.body.userId = decoded.userId;
+            }
+            next();
+        })
+            .catch(err => next());
+    }
+    else {
+        next();
+    }
+};
+exports.userAuthorization = userAuthorization;
 const userAuthenticated = (req, res, next) => {
     try {
         const authorizationHeader = req.headers.authorization || 'Bearer';

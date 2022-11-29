@@ -7,13 +7,16 @@ exports.achievementRouters = void 0;
 const express_1 = __importDefault(require("express"));
 const achievement_1 = require("../mongoose/achievement");
 const const_1 = require("../const");
+const mongodb_1 = require("mongodb");
 exports.achievementRouters = express_1.default.Router();
 exports.achievementRouters.get('/list', (req, res) => {
     const page = +(req.query.page || 1) - 1;
     const limit = +(req.query.limit || 10);
+    const board = req.query.board;
+    const userId = req.body.userId;
     let match = {};
-    if (req.body.userId) {
-        match = { scoredBy: req.body.userId };
+    if (req.body.userId && board !== 'global') {
+        match = { scoredBy: new mongodb_1.ObjectId(userId) };
     }
     achievement_1.AchievementSchema.aggregate([
         { $match: match },

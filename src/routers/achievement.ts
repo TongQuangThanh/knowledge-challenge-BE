@@ -1,14 +1,17 @@
 import express from 'express';
 import { AchievementSchema } from '../mongoose/achievement'
 import { ERROR_SERVER, SUCCESS_ADD_ACHIEVEMENT, SUCCESS_FETCH } from '../const';
+import { ObjectId } from 'mongodb';
 export const achievementRouters = express.Router();
 
 achievementRouters.get('/list', (req, res) => {
   const page = +(req.query.page || 1) - 1;
   const limit = +(req.query.limit || 10);
+  const board = req.query.board;
+  const userId = req.body.userId;
   let match = {};
-  if (req.body.userId) {
-    match = { scoredBy: req.body.userId };
+  if (req.body.userId && board !== 'global') {
+    match = { scoredBy: new ObjectId(userId) };
   }
   AchievementSchema.aggregate(
     [
