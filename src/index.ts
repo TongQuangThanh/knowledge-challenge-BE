@@ -42,5 +42,5 @@ app.use("/achievement", userAuthorization, achievementRouters);
 
 server.listen(port, async () => {
   console.log(`[server]: Server is running, current time: `, new Date());
-  setInterval(async () => console.log((await axios.get('https://thnvn-knowledge-challenge.onrender.com')).data), 1000 * 60 * (5 - 0.1)); // 4.9p
+  // setInterval(async () => console.log((await axios.get('https://thnvn-knowledge-challenge.onrender.com')).data), 1000 * 60 * (5 - 0.1)); // 4.9p
 });
