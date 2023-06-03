@@ -19,7 +19,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../mongoose/user");
 const const_1 = require("../const");
 exports.userRouters = express_1.default.Router();
-const salt = process.env.SALT_ROUNDS || 10;
+const salt = process.env.SALT_ROUNDS || const_1.LIMIT;
 exports.userRouters.post('/change', (req, res) => {
 });
 exports.userRouters.post('/forgot-password', (req, res) => {
@@ -51,7 +51,6 @@ exports.userRouters.post('/signin', (req, res) => {
 });
 exports.userRouters.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // if (req.body.password !== req.body.rePassword) {
-    //   return res.status(400).json({ message: "Nhập lại mật khẩu không khớp", data: null });
     // }
     const user = yield user_1.UserSchema.findOne({ email: req.body.email });
     if (user) {

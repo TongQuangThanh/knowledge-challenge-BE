@@ -21,6 +21,7 @@ const axios_1 = __importDefault(require("axios"));
 const cors_1 = __importDefault(require("cors"));
 const achievement_1 = require("./routers/achievement");
 const token_1 = require("./middleware/token");
+const question_set_1 = require("./routers/question-set");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
@@ -48,7 +49,8 @@ app.get("/", (req, res, next) => {
 });
 app.use("/user", user_1.userRouters);
 app.use("/achievement", token_1.userAuthorization, achievement_1.achievementRouters);
+app.use("/question-set", token_1.userAuthorization, question_set_1.questionSetRouters);
 server.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     console.log(`[server]: Server is running, current time: `, new Date());
-    setInterval(() => __awaiter(void 0, void 0, void 0, function* () { return console.log((yield axios_1.default.get('https://thnvn-knowledge-challenge.onrender.com')).data); }), 1000 * 60 * (5 - 0.1)); // 4.9p
+    setInterval(() => __awaiter(void 0, void 0, void 0, function* () { return console.log((yield axios_1.default.get('https://knowledge-challenge.onrender.com')).data); }), 1000 * 60 * (5 - 0.1)); // 4.9p
 }));

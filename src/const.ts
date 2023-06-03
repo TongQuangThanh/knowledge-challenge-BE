@@ -1,5 +1,27 @@
-export const APP_NAME = 'thnvn_knowledge-challenge_';
-export const APP_NAME_TOKEN = APP_NAME + 'token';
+// export const APP_NAME = 'thnvn_knowledge-challenge_';
+// export const APP_NAME_TOKEN = APP_NAME + 'token';
+
+export type Guid = string & { isGuid: true };
+
+export enum QuestionType {
+  text = 'text_choice',
+  image = 'image_choice'
+}
+
+export enum Category {
+  music = 'music',
+  sport = 'sport_and_leisure',
+  film = 'film_and_tv',
+  art = 'arts_and_literature',
+  history = 'history',
+  culture = 'society_and_culture',
+  science = 'science',
+  geography = 'geography',
+  food = 'food_and_drink',
+  general = 'general_knowledge'
+}
+
+export const LIMIT = 10;
 
 // ERROR
 export const ERROR_SERVER = 'Server error!!!';
@@ -15,4 +37,4 @@ export const SUCCESS_RESET_PASSWORD = 'Reset password successfully';
 export const SUCCESS_SIGNIN = 'Login successfully';
 export const SUCCESS_SIGNUP = 'Signup successfully';
 export const SUCCESS_FETCH = 'Fetch successfully';
-export const SUCCESS_ADD_ACHIEVEMENT = 'Add achievement successfully';
+export const SUCCESS_ADD = 'Add successfully';

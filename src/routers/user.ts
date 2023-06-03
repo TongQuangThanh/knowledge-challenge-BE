@@ -2,10 +2,10 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt, { Secret } from 'jsonwebtoken';
 import { UserSchema } from '../mongoose/user'
-import { ERROR_EMAIL_DUPLICATE, ERROR_EMAIL_NOT_FOUND, ERROR_SERVER, ERROR_SIGNIN_FAIL, SUCCESS_RESET_PASSWORD, SUCCESS_SIGNIN, SUCCESS_SIGNUP } from '../const';
+import { ERROR_EMAIL_DUPLICATE, ERROR_EMAIL_NOT_FOUND, ERROR_SERVER, ERROR_SIGNIN_FAIL, LIMIT, SUCCESS_RESET_PASSWORD, SUCCESS_SIGNIN, SUCCESS_SIGNUP } from '../const';
 export const userRouters = express.Router();
 
-const salt = process.env.SALT_ROUNDS || 10;
+const salt = process.env.SALT_ROUNDS || LIMIT;
 
 userRouters.post('/change', (req, res) => {
 });
@@ -40,7 +40,6 @@ userRouters.post('/signin', (req, res) => {
 
 userRouters.post('/signup', async (req, res) => {
   // if (req.body.password !== req.body.rePassword) {
-  //   return res.status(400).json({ message: "Nhập lại mật khẩu không khớp", data: null });
   // }
   const user = await UserSchema.findOne({ email: req.body.email });
   if (user) {

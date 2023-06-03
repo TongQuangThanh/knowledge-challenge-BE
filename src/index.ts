@@ -7,6 +7,7 @@ import axios from 'axios';
 import cors from 'cors';
 import { achievementRouters } from './routers/achievement';
 import { userAuthenticated, userAuthorization } from './middleware/token';
+import { questionSetRouters } from './routers/question-set';
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ app.get("/", (req, res, next) => {
 
 app.use("/user", userRouters);
 app.use("/achievement", userAuthorization, achievementRouters);
+app.use("/question-set", userAuthorization, questionSetRouters);
 
 server.listen(port, async () => {
   console.log(`[server]: Server is running, current time: `, new Date());
