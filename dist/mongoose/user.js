@@ -11,6 +11,8 @@ const userSchema = new mongoose_1.default.Schema({
     email: { type: String, require: true, unique: true },
     password: { type: String, require: true },
     avatarUrl: String,
+    // followers: { type: String, require: true },
+    // friends: { type: String, require: true },
     birth: Date
 });
 userSchema.plugin(mongoose_unique_validator_1.default);

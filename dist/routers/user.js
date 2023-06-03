@@ -18,6 +18,9 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../mongoose/user");
 const const_1 = require("../const");
+const token_1 = require("../middleware/token");
+const achievement_1 = require("../mongoose/achievement");
+const question_set_1 = require("../mongoose/question-set");
 exports.userRouters = express_1.default.Router();
 const salt = process.env.SALT_ROUNDS || const_1.LIMIT;
 exports.userRouters.post('/change', (req, res) => {
@@ -71,4 +74,26 @@ exports.userRouters.post('/signup', (req, res) => __awaiter(void 0, void 0, void
         });
     })
         .catch(err => res.status(500).json({ message: const_1.ERROR_SERVER, data: err }));
+}));
+exports.userRouters.get('/profile', token_1.userAuthenticated, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = req.body.userId;
+        const user = yield user_1.UserSchema.findById(userId);
+        if (!user) {
+            return res.status(400).json({ message: const_1.ERROR_USER_NOT_FOUND, data: null });
+        }
+        const achievementList = yield achievement_1.AchievementSchema.find({ scoredBy: userId });
+        const questionSets = yield question_set_1.QuestionSetSchema.find({ userId });
+        const userInfo = {
+            userName: user.name,
+            scores: achievementList.reduce((total, achievement) => total + (achievement.point || 0), 0),
+            // followers: 
+            // friends:
+            questionSets
+        };
+        res.status(200).json({ message: const_1.SUCCESS_FETCH, data: userInfo });
+    }
+    catch (error) {
+        res.status(500).json({ message: const_1.ERROR_SERVER, data: error });
+    }
 }));

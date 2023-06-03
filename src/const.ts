@@ -31,6 +31,7 @@ export const ERROR_EMAIL_DUPLICATE = 'Email are duplicate. Please choose another
 export const ERROR_CLIENT = 'Error occur. Please try again later!';
 export const ERROR_FORBIDDEN = 'You are not allow!';
 export const ERROR_AUTHENTICATE_REQUIRED = 'User not authenticated!';
+export const ERROR_USER_NOT_FOUND = 'User not found!!!';
 
 // SUCCESS
 export const SUCCESS_RESET_PASSWORD = 'Reset password successfully';
@@ -38,3 +39,4 @@ export const SUCCESS_SIGNIN = 'Login successfully';
 export const SUCCESS_SIGNUP = 'Signup successfully';
 export const SUCCESS_FETCH = 'Fetch successfully';
 export const SUCCESS_ADD = 'Add successfully';
+export const SUCCESS_DELETE = 'Delete successfully';

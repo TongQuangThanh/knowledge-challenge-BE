@@ -2,7 +2,7 @@
 // export const APP_NAME = 'thnvn_knowledge-challenge_';
 // export const APP_NAME_TOKEN = APP_NAME + 'token';
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SUCCESS_ADD = exports.SUCCESS_FETCH = exports.SUCCESS_SIGNUP = exports.SUCCESS_SIGNIN = exports.SUCCESS_RESET_PASSWORD = exports.ERROR_AUTHENTICATE_REQUIRED = exports.ERROR_FORBIDDEN = exports.ERROR_CLIENT = exports.ERROR_EMAIL_DUPLICATE = exports.ERROR_EMAIL_NOT_FOUND = exports.ERROR_SIGNIN_FAIL = exports.ERROR_SERVER = exports.LIMIT = exports.Category = exports.QuestionType = void 0;
+exports.SUCCESS_DELETE = exports.SUCCESS_ADD = exports.SUCCESS_FETCH = exports.SUCCESS_SIGNUP = exports.SUCCESS_SIGNIN = exports.SUCCESS_RESET_PASSWORD = exports.ERROR_USER_NOT_FOUND = exports.ERROR_AUTHENTICATE_REQUIRED = exports.ERROR_FORBIDDEN = exports.ERROR_CLIENT = exports.ERROR_EMAIL_DUPLICATE = exports.ERROR_EMAIL_NOT_FOUND = exports.ERROR_SIGNIN_FAIL = exports.ERROR_SERVER = exports.LIMIT = exports.Category = exports.QuestionType = void 0;
 var QuestionType;
 (function (QuestionType) {
     QuestionType["text"] = "text_choice";
@@ -30,9 +30,11 @@ exports.ERROR_EMAIL_DUPLICATE = 'Email are duplicate. Please choose another emai
 exports.ERROR_CLIENT = 'Error occur. Please try again later!';
 exports.ERROR_FORBIDDEN = 'You are not allow!';
 exports.ERROR_AUTHENTICATE_REQUIRED = 'User not authenticated!';
+exports.ERROR_USER_NOT_FOUND = 'User not found!!!';
 // SUCCESS
 exports.SUCCESS_RESET_PASSWORD = 'Reset password successfully';
 exports.SUCCESS_SIGNIN = 'Login successfully';
 exports.SUCCESS_SIGNUP = 'Signup successfully';
 exports.SUCCESS_FETCH = 'Fetch successfully';
 exports.SUCCESS_ADD = 'Add successfully';
+exports.SUCCESS_DELETE = 'Delete successfully';

@@ -2,7 +2,10 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt, { Secret } from 'jsonwebtoken';
 import { UserSchema } from '../mongoose/user'
-import { ERROR_EMAIL_DUPLICATE, ERROR_EMAIL_NOT_FOUND, ERROR_SERVER, ERROR_SIGNIN_FAIL, LIMIT, SUCCESS_RESET_PASSWORD, SUCCESS_SIGNIN, SUCCESS_SIGNUP } from '../const';
+import { ERROR_EMAIL_DUPLICATE, ERROR_EMAIL_NOT_FOUND, ERROR_SERVER, ERROR_SIGNIN_FAIL, ERROR_USER_NOT_FOUND, LIMIT, SUCCESS_FETCH, SUCCESS_RESET_PASSWORD, SUCCESS_SIGNIN, SUCCESS_SIGNUP } from '../const';
+import { userAuthenticated } from '../middleware/token';
+import { AchievementSchema } from '../mongoose/achievement';
+import { QuestionSetSchema } from '../mongoose/question-set';
 export const userRouters = express.Router();
 
 const salt = process.env.SALT_ROUNDS || LIMIT;
@@ -60,4 +63,26 @@ userRouters.post('/signup', async (req, res) => {
       });
     })
     .catch(err => res.status(500).json({ message: ERROR_SERVER, data: err }));
+});
+
+userRouters.get('/profile', userAuthenticated, async (req, res) => {
+  try {
+    const userId = req.body.userId;
+    const user = await UserSchema.findById(userId);
+    if (!user) {
+      return res.status(400).json({ message: ERROR_USER_NOT_FOUND, data: null });
+    }
+    const achievementList = await AchievementSchema.find({ scoredBy: userId });
+    const questionSets = await QuestionSetSchema.find({ userId });
+    const userInfo = {
+      userName: user.name,
+      scores: achievementList.reduce((total, achievement) => total + (achievement.point || 0), 0),
+      // followers: 
+      // friends:
+      questionSets
+    };
+    res.status(200).json({ message: SUCCESS_FETCH, data: userInfo });
+  } catch (error) {
+    res.status(500).json({ message: ERROR_SERVER, data: error });
+  }
 });
